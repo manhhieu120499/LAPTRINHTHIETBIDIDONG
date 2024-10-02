@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
 	View,
 	Text,
@@ -10,6 +10,7 @@ import {
 
 function ScreenApi(props) {
 	const { navigate, goBack } = props.navigation;
+	const [name, setName] = useState();
 	return (
 		<View style={{ flex: 1, backgroundColor: 'white' }}>
 			<StatusBar style="auto" />
@@ -61,6 +62,8 @@ function ScreenApi(props) {
 							color: 'black',
 							height: '100%',
 						}}
+						value={name}
+						onChangeText={(text) => setName(text)}
 					/>
 				</View>
 			</View>
@@ -74,7 +77,11 @@ function ScreenApi(props) {
 						alignItems: 'center',
 						justifyContent: 'center',
 					}}
-					onPress={() => navigate('ScreenApi02')}
+					onPress={() =>
+						navigate('ScreenApi02', {
+							name,
+						})
+					}
 				>
 					<Text style={{ fontSize: 16, color: 'white' }}>
 						GET STARTED {`->`}{' '}

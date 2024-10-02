@@ -9,10 +9,17 @@ import {
 	FlatList,
 } from 'react-native';
 import Checkbox from 'expo-checkbox';
+import { useNavigation } from '@react-navigation/native';
 
 function ScreenApi02(props) {
 	const { navigation, route } = props;
 	const { navigate, goBack } = navigation;
+	const [isEdited, setIsEdited] = useState(false);
+	const [jobName, setJobName] = useState({
+		id: '',
+		job_title: '',
+	});
+	const navigations = useNavigation();
 	const BASE_URI =
 		'https://665024f3ec9b4a4a6030e184.mockapi.io/api/v1/course/jobs';
 	const [isChecked, setChecked] = useState(false);
@@ -27,6 +34,31 @@ function ScreenApi02(props) {
 				setJobs(data);
 			});
 	};
+
+	const handleUpdateJob = (id) => {
+		fetch(BASE_URI + '/' + id, {
+			method: 'PUT',
+			headers: {
+				'Content-type': 'application/json',
+			},
+			body: JSON.stringify(jobName),
+		}).then((res) => {
+			if (res.status == 200) {
+				alert('Update job successful');
+			} else {
+				alert('Update job fail');
+			}
+		});
+		handleRenderJobs();
+	};
+
+	useEffect(() => {
+		const unsubscribe = navigations.addListener('focus', () => {
+			handleRenderJobs();
+		});
+
+		return unsubscribe;
+	}, [navigation]);
 
 	useEffect(() => {
 		handleRenderJobs();
@@ -62,7 +94,7 @@ function ScreenApi02(props) {
 								textAlign: 'center',
 							}}
 						>
-							Hi Twinkle
+							{route.params.name || 'Hi Twinkle'}
 						</Text>
 						<Text
 							style={{
@@ -137,13 +169,48 @@ function ScreenApi02(props) {
 								value={isChecked}
 								onValueChange={setChecked}
 							/>
-							<Text style={{ width: '70%', paddingLeft: 15 }}>
-								{item.job_title}
-							</Text>
-							<TouchableOpacity>
-								<Image
-									source={require('../../assets/edit.png')}
-								/>
+							<TextInput
+								style={{
+									width: '70%',
+									paddingLeft: 15,
+									color: 'black',
+								}}
+								value={jobName.job_title || item.job_title}
+								editable={isEdited}
+								onChangeText={(text) =>
+									setJobName({ id: item.id, job_title: text })
+								}
+							/>
+
+							<TouchableOpacity
+								onPress={() => setIsEdited(!isEdited)}
+							>
+								{!isEdited && (
+									<Image
+										source={require('../../assets/edit.png')}
+									/>
+								)}
+								{isEdited && (
+									<TouchableOpacity
+										style={{
+											width: 40,
+											height: 20,
+											borderWidth: 1,
+											borderColor: '#ccc',
+											alignItems: 'center',
+										}}
+										onPress={() => {
+											handleUpdateJob(item.id);
+											setIsEdited(!isEdited);
+											setJobName({
+												id: '',
+												job_title: '',
+											});
+										}}
+									>
+										<Text>Save</Text>
+									</TouchableOpacity>
+								)}
 							</TouchableOpacity>
 						</View>
 					)}
@@ -155,7 +222,11 @@ function ScreenApi02(props) {
 			<View style={{ flex: 2, alignItems: 'center', marginTop: 20 }}>
 				<TouchableOpacity
 					style={{ width: 69, height: 69, borderRadius: 33 }}
-					onPress={() => navigate('ScreenApi03')}
+					onPress={() =>
+						navigate('ScreenApi03', {
+							name: route.params.name,
+						})
+					}
 				>
 					<Image
 						source={require('../../assets/btn_add.png')}

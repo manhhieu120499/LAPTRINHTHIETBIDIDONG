@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
 	View,
 	Text,
@@ -9,7 +9,31 @@ import {
 } from 'react-native';
 
 function ScreenApi03(props) {
+	const BASE_URI =
+		'https://665024f3ec9b4a4a6030e184.mockapi.io/api/v1/course/jobs';
 	const { navigate, goBack } = props.navigation;
+	const [job, setJob] = useState({
+		id: '',
+		job_title: '',
+	});
+
+	const handleAddJob = (job) => {
+		fetch(BASE_URI, {
+			method: 'POST',
+			headers: {
+				'Content-type': 'application/json',
+			},
+			body: JSON.stringify(job),
+		}).then((res) => {
+			if (res.status == 201) {
+				alert('Add Job Successful');
+				navigate('ScreenApi02', {
+					name: props.route.params.name,
+				});
+			}
+			return res;
+		});
+	};
 	return (
 		<View
 			style={{ flex: 1, backgroundColor: 'white', paddingHorizontal: 15 }}
@@ -23,7 +47,13 @@ function ScreenApi03(props) {
 					alignItems: 'center',
 				}}
 			>
-				<TouchableOpacity onPress={() => navigate('ScreenApi02')}>
+				<TouchableOpacity
+					onPress={() =>
+						navigate('ScreenApi02', {
+							name: props.route.params.name,
+						})
+					}
+				>
 					<Image source={require('../../assets/btnGoBack.png')} />
 				</TouchableOpacity>
 				<View style={{ flexDirection: 'row' }}>
@@ -40,7 +70,7 @@ function ScreenApi03(props) {
 								textAlign: 'center',
 							}}
 						>
-							Hi Twinkle
+							{props.route.params.name || 'Hi Twinkle'}
 						</Text>
 						<Text
 							style={{
@@ -84,6 +114,13 @@ function ScreenApi03(props) {
 							height: '100%',
 							paddingLeft: 10,
 						}}
+						value={job.job_title}
+						onChangeText={(text) =>
+							setJob({
+								...job,
+								job_title: text,
+							})
+						}
 					/>
 				</View>
 			</View>
@@ -97,7 +134,12 @@ function ScreenApi03(props) {
 						alignItems: 'center',
 						justifyContent: 'center',
 					}}
-					onPress={() => navigate('ScreenApi02')}
+					onPress={async () => {
+						const res = await handleAddJob({
+							...job,
+							id: Math.floor(Math.random() * 100),
+						});
+					}}
 				>
 					<Text style={{ fontSize: 16, color: 'white' }}>
 						FINISH -{`>`}
