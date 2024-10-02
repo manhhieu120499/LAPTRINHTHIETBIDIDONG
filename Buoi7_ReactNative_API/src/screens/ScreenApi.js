@@ -8,7 +8,8 @@ import {
 	Image,
 } from 'react-native';
 
-function ScreenApi() {
+function ScreenApi(props) {
+	const { navigate, goBack } = props.navigation;
 	return (
 		<View style={{ flex: 1, backgroundColor: 'white' }}>
 			<StatusBar style="auto" />
@@ -73,6 +74,7 @@ function ScreenApi() {
 						alignItems: 'center',
 						justifyContent: 'center',
 					}}
+					onPress={() => navigate('ScreenApi02')}
 				>
 					<Text style={{ fontSize: 16, color: 'white' }}>
 						GET STARTED {`->`}{' '}

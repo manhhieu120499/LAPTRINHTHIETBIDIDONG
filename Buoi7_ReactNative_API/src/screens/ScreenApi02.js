@@ -10,7 +10,9 @@ import {
 } from 'react-native';
 import Checkbox from 'expo-checkbox';
 
-function ScreenApi02() {
+function ScreenApi02(props) {
+	const { navigation, route } = props;
+	const { navigate, goBack } = navigation;
 	const BASE_URI =
 		'https://665024f3ec9b4a4a6030e184.mockapi.io/api/v1/course/jobs';
 	const [isChecked, setChecked] = useState(false);
@@ -43,7 +45,9 @@ function ScreenApi02() {
 					alignItems: 'center',
 				}}
 			>
-				<Image source={require('../../assets/btnGoBack.png')} />
+				<TouchableOpacity onPress={() => navigate('ScreenApi')}>
+					<Image source={require('../../assets/btnGoBack.png')} />
+				</TouchableOpacity>
 				<View style={{ flexDirection: 'row' }}>
 					<Image
 						source={require('../../assets/user.png')}
@@ -151,6 +155,7 @@ function ScreenApi02() {
 			<View style={{ flex: 2, alignItems: 'center', marginTop: 20 }}>
 				<TouchableOpacity
 					style={{ width: 69, height: 69, borderRadius: 33 }}
+					onPress={() => navigate('ScreenApi03')}
 				>
 					<Image
 						source={require('../../assets/btn_add.png')}
