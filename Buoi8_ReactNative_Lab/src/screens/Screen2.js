@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	View,
 	TextInput,
@@ -25,7 +25,15 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default function Screen2() {
+const avatarImage = {
+	'donut_yellow1.png': require('../../assets/donut_yellow1.png'),
+	'donut_red1.png': require('../../assets/donut_red1.png'),
+	'tasty_donut1.png': require('../../assets/tasty_donut1.png'),
+	'green_donut1.png': require('../../assets/green_donut1.png'),
+};
+
+export default function Screen2(props) {
+	const dataDonut = props.route.params.infoDonut;
 	const [count, setCount] = useState(0);
 	const handleIncrease = () => {
 		setCount((pre) => pre + 1);
@@ -33,6 +41,7 @@ export default function Screen2() {
 	const handleDecrease = () => {
 		setCount((pre) => pre - 1);
 	};
+	useEffect(() => console.log(dataDonut));
 	return (
 		<View style={{ flex: 1, backgroundColor: 'white' }}>
 			<View
@@ -42,12 +51,12 @@ export default function Screen2() {
 					justifyContent: 'center',
 				}}
 			>
-				<Image source={require('../../assets/pink_donut1.png')} />
+				<Image source={avatarImage[dataDonut.avatar]} />
 			</View>
 			<View style={{ flex: 5, paddingHorizontal: 10 }}>
 				<View style={{ height: 80 }}>
 					<Text style={{ fontSize: 20, fontWeight: 'bold' }}>
-						Pink Donut
+						{dataDonut.cake_name}
 					</Text>
 					<View
 						style={{
@@ -64,10 +73,10 @@ export default function Screen2() {
 								color: 'rgba(0, 0, 0, 0.54)',
 							}}
 						>
-							Spicy tasty donut family
+							{dataDonut.description}
 						</Text>
 						<Text style={{ fontSize: 20, fontWeight: 'bold' }}>
-							$20.00
+							${dataDonut.price}
 						</Text>
 					</View>
 				</View>
@@ -173,6 +182,7 @@ export default function Screen2() {
 							justifyContent: 'center',
 							borderRadius: 5,
 						}}
+						onPress={() => alert('Add Donut Successful')}
 					>
 						<Text
 							style={{

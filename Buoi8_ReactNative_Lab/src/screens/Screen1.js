@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, Pressable } from 'react-native';
 import { View, Text, Image, TextInput, StyleSheet } from 'react-native';
 import DonutItem from './DonutItem';
+import Screen2 from './Screen2';
 
 const styles = StyleSheet.create({
 	btn: {
@@ -20,7 +21,9 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default function Screen1() {
+export default function Screen1(props) {
+	const { navigation, route } = props;
+	const { navigate, goBack } = navigation;
 	const [active, setActive] = useState({
 		donut: true,
 		pink_donut: false,
@@ -173,7 +176,9 @@ export default function Screen1() {
 				{donut.length > 0 && (
 					<FlatList
 						data={donut}
-						renderItem={({ item }) => <DonutItem data={item} />}
+						renderItem={({ item }) => (
+							<DonutItem data={item} navigate={navigate} />
+						)}
 						keyExtractor={(item) => item.id}
 						showsVerticalScrollIndicator={false}
 					/>

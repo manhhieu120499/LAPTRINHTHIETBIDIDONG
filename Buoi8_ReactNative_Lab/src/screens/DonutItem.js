@@ -1,6 +1,12 @@
 import React from 'react';
-import { Pressable } from 'react-native';
-import { View, Text, Image, TextInput, StyleSheet } from 'react-native';
+import {
+	View,
+	Text,
+	Image,
+	TextInput,
+	StyleSheet,
+	Pressable,
+} from 'react-native';
 
 const avatarImage = {
 	'donut_yellow1.png': require('../../assets/donut_yellow1.png'),
@@ -9,11 +15,11 @@ const avatarImage = {
 	'green_donut1.png': require('../../assets/green_donut1.png'),
 };
 
-export default function DonutItem({ data }) {
+export default function DonutItem({ data, navigate }) {
 	const { cake_name, description, price, avatar } = data;
 
 	return (
-		<View
+		<Pressable
 			style={{
 				flexDirection: 'row',
 				width: 337,
@@ -25,6 +31,16 @@ export default function DonutItem({ data }) {
 				marginVertical: 7,
 				position: 'relative',
 			}}
+			onPress={() =>
+				navigate('Screen2', {
+					infoDonut: {
+						cake_name,
+						description,
+						price,
+						avatar,
+					},
+				})
+			}
 		>
 			<Image
 				source={avatarImage[avatar]}
@@ -65,6 +81,6 @@ export default function DonutItem({ data }) {
 					/>
 				</View>
 			</View>
-		</View>
+		</Pressable>
 	);
 }
